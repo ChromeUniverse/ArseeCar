@@ -4,12 +4,7 @@
 
 int joyPinX = A0;
 int joyPinY = A1;
-int valueX = 0;
-int valueY = 0;
-
-int treatValue(int data) {
-  return data;
-}
+String xAxis, yAxis;
 
 #include <SPI.h>
 #include <nRF24L01.h>
@@ -17,6 +12,9 @@ int treatValue(int data) {
 
 RF24 radio(9, 10); // CE, CSN
 const byte address[6] = "00001";
+
+char xyData[32] = "";
+
 void setup() { 
   Serial.begin(9600);
   radio.begin();
@@ -25,7 +23,14 @@ void setup() {
   radio.stopListening();
 }
 void loop() {  
-  valueX = analogRead(joyPinX);  
-  radio.write(&valueX, sizeof(int));
-  delay(50);
+  xAxis = analogRead(A0); // Read Joysticks X-axis
+  yAxis = analogRead(A1); 
+  
+  xAxis.toCharArray(xyData, 5); 
+  radio.write(&xyData, sizeof(xyData));
+  
+  yAxis.toCharArray(xyData, 5);
+  radio.write(&xyData, sizeof(xyData));
+    
+  delay(20);
 }

@@ -1,5 +1,3 @@
-#include <SPI.h> 
-
 // Back Left
 #define BLP 45
 #define BL1 35
